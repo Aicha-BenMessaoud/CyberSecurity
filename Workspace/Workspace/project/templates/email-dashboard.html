@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>Phishunter</title>
+    <!-- Favicon icon -->
+    <link rel="icon" type="image/png" sizes="16x16" href="{%static 'images/logo1.png'%}">
+    <!-- Custom Stylesheet -->
+    <link href="{% static 'css/style.css'%}" rel="stylesheet">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        .chart-container {
+            width: 45%;
+            height: 300px;
+            margin: 10px;
+            display: inline-block;
+        }
+    </style>
+</head>
+<script>
+    function percentFilter(value) {
+        return (value * 100).toFixed(2) + '%';
+    }
+</script>
+
+<body>
+
+
+
+
+    <!--*******************
+        Preloader start
+    ********************-->
+    <div id="preloader">
+        <div class="loader">
+            <svg class="circular" viewBox="25 25 50 50">
+                <circle class="path" cx="50" cy="50" r="20" fill="none" stroke-width="3" stroke-miterlimit="10" />
+            </svg>
+        </div>
+    </div>
+    <!--*******************
+        Preloader end
+    ********************-->
+
+
+    <!--**********************************
+        Main wrapper start
+    ***********************************-->
+    <div id="main-wrapper">
+
+        <!--**********************************
+            Nav header start
+        ***********************************-->
+        <div class="nav-header">
+            <div class="brand-logo">
+              <a href="index">
+                <b class="logo-abbr"><img src=""  height="200" width="300" alt=""></b>
+                <span class="logo-compact"><img src="{%static 'images/logo-compact.png'%}" alt=""></span>
+                <span class="brand-title">
+                  <div style="display: flex; justify-content: center; align-items: center; margin-top: -75px; margin-left: auto;">
+                    <img src="{%static 'images/logo-white.png'%}" height="200" width="300" alt="">
+                  </div>
+                </span>
+              </a>
+            </div>
+          </div>
+        <!--**********************************
+            Nav header end
+        ***********************************-->
+
+        <!--**********************************
+            Header start
+        ***********************************-->
+        <div class="header">
+            <div class="header-content clearfix">
+
+                <div class="nav-control">
+                    <div class="hamburger">
+                        <span class="toggle-icon"><i class="icon-menu"></i></span>
+                    </div>
+                </div>
+
+                <div class="header-right">
+                    <ul class="clearfix">
+                        <li class="icons dropdown">
+                            <div class="user-img c-pointer position-relative" data-toggle="dropdown">
+                                <span class="activity active"></span>
+                                <img src="{%static 'images/user/1.png'%}" height="40" width="40" alt="">
+                            </div>
+                            <div class="drop-down dropdown-profile   dropdown-menu">
+                                <div class="dropdown-content-body">
+                                    <ul>
+                                        <li>
+                                            <a href="app-profile.html"><i class="icon-user"></i>
+                                                <span>Profile</span></a>
+                                        </li>
+                                        <li>
+                                            <a href="email-inbox.html"><i class="icon-envelope-open"></i>
+                                                <span>Inbox</span>
+                                                <div class="badge gradient-3 badge-pill badge-primary">3</div>
+                                            </a>
+                                        </li>
+
+                                        <hr class="my-2">
+                                        <li>
+                                            <a href="page-lock.html"><i class="icon-lock"></i> <span>Lock
+                                                    Screen</span></a>
+                                        </li>
+                                        <li><a href="{% url 'logout' %}"><i class="icon-key"></i> <span>Logout</span></a>
+                                        </li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!--**********************************
+            Header end ti-comment-alt
+        ***********************************-->
+
+        <!--**********************************
+            Sidebar start
+        ***********************************-->
+        <div class="nk-sidebar">
+            <div class="nk-nav-scroll">
+                <ul class="metismenu" id="menu">
+                    <li class="nav-label">Dashboard</li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-speedometer menu-icon"></i><span class="nav-text">Dashboard</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="{% url 'index'%}">Home</a></li>
+                            <!-- <li><a href="./index-2.html">Home 2</a></li> -->
+                        </ul>
+                    </li>
+                    <li class="nav-label">Apps</li>
+                    <li>
+                        <a class="has-arrow" href="javascript:void()" aria-expanded="false">
+                            <i class="icon-envelope menu-icon"></i> <span class="nav-text">Email</span>
+                        </a>
+                        <ul aria-expanded="false">
+                            <li><a href="./email-inbox.html">Inbox</a></li>
+                            <li><a href="./email-compose.html">Compose</a></li>
+                        </ul>
+                    </li>
+                    
+                </ul>
+            </div>
+        </div>
+        <!--**********************************
+            Sidebar end
+        ***********************************-->
+
+        <!--**********************************
+            Content body start
+        ***********************************-->
+        <div class="content-body">
+            <div class="row page-titles mx-0">
+                <div class="col p-md-0">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="javascript:void(0)">Dashboard</a></li>
+                        <li class="breadcrumb-item active"><a href="javascript:void(0)">Home</a></li>
+                    </ol>
+                </div>
+            </div>
+        
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <h1 style="font-family: 'Helvetica', sans-serif; font-weight: bold;">Email analysis report</h1>
+                    </div>
+                    <div class="col-sm-4">
+                        {% if final_score >= 0.5 %}
+                        <div class="alert alert-danger">Attention! This is a phishing email.</div>
+                        {% else %}
+                        <div class="alert alert-success">This is a legitimate email.</div>
+                        {% endif %}
+                    </div>
+                    <div class="col-sm-4">
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="font-family: 'Helvetica', sans-serif; letter-spacing: 1px; font-weight: bold;" class="card-title">Phishing risk</h4>
+                                <div style="color: #FF6384; width: 100%; height: 40px; position: absolute; top: 50%; left: 0; margin-top: 0px; line-height: 19px; text-align: center; font-size: 45px;">
+                                    {{ final_score_percentage }}%
+                                </div>
+                                <canvas id="chart1" width="500" height="250"></canvas>
+                                <div style="color: grey; margin-top: 20px; font-size: 16px; text-align: center;">
+                                    {% if final_score >= 0.5 %}
+                                    This is a phishing email
+                                    {% else %}
+                                    This is a legitimate email
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="font-family: 'Veranda', sans-serif; letter-spacing: 1px; font-weight: bold;" class="card-title">Spam risk</h4>
+                                <div style="color: #FF6384; width: 100%; height: 40px; position: absolute; top: 50%; left: 0; margin-top: 0px; line-height: 19px; text-align: center; font-size: 45px;">
+                                    {{ spam_score_percentage }}%
+                                </div>
+                                <canvas id="chart2" width="500" height="250"></canvas>
+                                <div style="color: grey; margin-top: 20px; font-size: 16px; text-align: center;">
+                                    {% if spam_score >= 0.5 %}
+                                    This is a spam
+                                    {% else %}
+                                    This is not a spam
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="font-family: 'Helvetica'; letter-spacing: 1px; font-weight: bold;" class="card-title">Fake news risk</h4>
+                                <div style="color: #FF6384; width: 100%; height: 40px; position: absolute; top: 50%; left: 0; margin-top: 0px; line-height: 19px; text-align: center; font-size: 45px;">
+                                    {{ fake_news_score_percentage }}%
+                                </div>
+                                <canvas id="chart3" width="500" height="250"></canvas>
+                                <div style="color: grey; margin-top: 20px; font-size: 16px; text-align: center;">
+                                    {% if fake_news_score >= 0.5 %}
+                                    This is fake news
+                                    {% else %}
+                                    This is real news
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        
+                <div class="row">
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="font-family: 'Helvetica'; letter-spacing: 1px; font-weight: bold;" class="card-title">Cyberbullying risk</h4>
+                                <div style="color: #FF6384; width: 100%; height: 40px; position: absolute; top: 50%; left: 0; margin-top: 0px; line-height: 19px; text-align: center; font-size: 45px;">
+                                    {{ toxicity_score_percentage }}%
+                                </div>
+                                <canvas id="chart4" width="500" height="250"></canvas>
+                                <div style="color: grey; margin-top: 20px; font-size: 16px; text-align: center;">
+                                    {% if toxicity_score >= 0.5 %}
+                                    This email contains cyberbullying
+                                    {% else %}
+                                    This email doesn't contain cyberbullying
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="font-family: 'Helvetica'; letter-spacing: 1px; font-weight: bold;" class="card-title">Malicious URL risk</h4>
+                                <div style="color: #FF6384; width: 100%; height: 40px; position: absolute; top: 50%; left: 0; margin-top: 0px; line-height: 19px; text-align: center; font-size: 40px;">
+                                    {% if url_score < 0.5 %}
+                                    This is a safe URL
+                                    {% elif url_score == 2 %}
+                                    No URL to scan
+                                    
+                                    
+                                    {% elif url_score > 0.5 %}
+                                    {% if url_score < 1.1 %}
+                                    {{ url_score_percentage }}%
+                                    {% endif %}
+                                    {% endif %}
+                                    
+                                </div>
+                                {% if url_score > 0.5 %}
+                                {% if url_score < 1.1 %}
+                                <canvas id="chart5" width="500" height="250"></canvas>
+                                {% endif %}
+                                {% endif %}
+                                <div style="color: grey; margin-top: 20px; font-size: 16px; text-align: center;">
+                                    {% if url_score < 0.5 %}
+                                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                                    {% elif url_score == 2.0 %}
+                                    <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                                    {% elif url_score > 0.5 %}
+                                    {% if url_score < 1.1 %}
+                                    This email contains at least one malicious URL
+                                    {% endif %}
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <h4 style="font-family:'Helvetica'; letter-spacing:1px; font-weight: bold;"
+                                    class="card-title">
+                                    Malicious attachement risk</h4>
+                                
+                                <div style="color:rgba(54, 162, 235, 0.6);width: 100%; height: 40px; position: absolute; top: 50%; left: 0; margin-top: 0px;
+                                         line-height:19px; text-align: center;font-size:40px;">
+                                    {% if attachement_score < 0.5 %}
+                                        Safe attachment
+                                    {% elif attachement_score == 2 %}
+                                        No attachments 
+                                    {% elif attachement_score > 0.5 %}
+                                        {% if attachement_score < 1.1 %}
+                                            {{ attachement_score_percent }}%
+                                        {% endif %}
+                                    {% endif %}
+    
+                                </div>
+                                {% if attachement_score > 0.5 %}
+                                    {% if attachement_score < 1.1 %}
+                                        <canvas id="chart6" width="500" height="250"></canvas>
+                                    {% endif %}
+                                {% endif %}
+                                
+                                <div style="color:grey; margin-top: 20px; font-size: 16px; text-align: center;">
+                                    {% if attachement_score < 0.5 %}
+                                        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                                    {% elif attachement_score == 2.0 %}
+                                        <br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+                                    {% elif attachement_score > 0.5 %}
+                                        {% if attachement_score < 1.1 %}
+                                            This email contains at least one malicious attachement
+                                        {% endif %}
+                                    {% endif %}
+    
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+            <div>
+                <div style="display: flex; justify-content: center; align-items: center;">
+                    <div class="row">
+                        <div class="col-lg-14">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 style="font-family: 'Verdana', sans-serif; letter-spacing: 1px; font-weight: bold;" class="card-title">Emotion Analysis</h4>
+                                    <canvas id="chart_" width="700" height="500"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        </div>
+        
+        <script>
+            // Chart 2 - Radar chart
+            const ctx_ = document.getElementById("chart_").getContext("2d");
+            const chart_ = new Chart(ctx_, {
+                type: "radar",
+                data: {
+                    labels: ["Fear", "Anger", "Anticipation", "Trust", "Surprise", "Positive", "Negative", "Sadness", "Disgust", "Joy"],
+                    datasets: [{
+                        label: "Emotion Analysis",
+                        data: [{{ fear }}, {{ anger }}, {{ anticipation }}, {{ trust }}, {{ surprise }}, {{ positive }}, {{ negative }}, {{ email.sadness }}, {{ disgust }}, {{ joy }}],
+                        backgroundColor: "rgba(255, 99, 132, 0.2)",
+                        borderColor: "rgba(255, 99, 132, 1)",
+                        pointBackgroundColor: "rgba(255, 99, 132, 1)",
+                        pointBorderColor: "#fff",
+                        pointHoverBackgroundColor: "#fff",
+                        pointHoverBorderColor: "rgba(255, 99, 132, 1)"
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scale: {
+                        ticks: {
+                            beginAtZero: true,
+                            min: 0,
+                            max: 1,
+                            stepSize: 1
+                        }
+                    }
+                }
+            });
+        </script>
+
+        <script>
+            // Chart 1 - Doughnut chart Phishing score
+            {% block content %}
+            const ctx1 = document.getElementById("chart1").getContext("2d");
+            const data1 = [];
+            const phishingProb = {{ final_score }};
+            const notPhishingProb = 1 - phishingProb;
+            const chart1 = new Chart(ctx1, {
+                type: "doughnut",
+                data: {
+                    labels: ["Phishing", "Not Phishing"],
+                    datasets: [{
+                        data: [phishingProb, notPhishingProb],
+                        backgroundColor: ["rgba(75, 192, 192, 0.6)", "#D9D9D9"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        labels: {
+                            render: "percentage",
+                            fontColor: ["white", "white"],
+                            precision: 2,
+                            fontSize: 20,
+                            fontStyle: "bold"
+                        }
+                    }
+                }
+            });
+
+            // Chart 2 - Doughnut chart Spam score
+            const ctx2 = document.getElementById("chart2").getContext("2d");
+            const data2 = [];
+            const spamProb = {{ spam_score }};
+            const notSpamProb = 1 - spamProb;
+            const chart2 = new Chart(ctx2, {
+                type: "doughnut",
+                data: {
+                    labels: ["Spam", "Not Spam"],
+                    datasets: [{
+                        data: [spamProb, notSpamProb],
+                        backgroundColor: ["rgba(255, 99, 132, 0.6)", "#D9D9D9"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        labels: {
+                            render: "percentage",
+                            fontColor: ["white", "white"],
+                            precision: 2,
+                            fontSize: 20,
+                            fontStyle: "bold"
+                        }
+                    }
+                }
+            });
+
+            // Chart 3 - Doughnut chart Fake news score
+            const ctx3 = document.getElementById("chart3").getContext("2d");
+            const data3 = [];
+            const fakeNewsProb = {{ fake_news_score }};
+            const notFakeNewsProb =   1-fakeNewsProb ;
+            const chart3 = new Chart(ctx3, {
+                type: "doughnut",
+                data: {
+                    labels: ["Fake news", "Not fake news"],
+                    datasets: [{
+                        data: [fakeNewsProb, notFakeNewsProb],
+                        backgroundColor: ["rgba(54, 162, 235, 0.6)", "#D9D9D9"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        labels: {
+                            render: "percentage",
+                            fontColor: ["white", "white"],
+                            precision: 2,
+                            fontSize: 20,
+                            fontStyle: "bold"
+                        }
+                    }
+                }
+            });
+
+            //Chart 4 - Doughnut chart url score
+            const ctx4 = document.getElementById("chart4").getContext("2d");
+            const data4 = [];
+            const toxicityProb = {{ toxicity_score }};
+            const nottoxicityProb = 1 - toxicityProb;
+            const chart4 = new Chart(ctx4, {
+                type: "doughnut",
+                data: {
+                    labels: ["Toxic", "Not toxic"],
+                    datasets: [{
+                        data: [toxicityProb, nottoxicityProb],
+                        backgroundColor: ["rgba(75, 192, 192, 0.6)", "#D9D9D9"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        labels: {
+                            render: "percentage",
+                            fontColor: ["white", "white"],
+                            precision: 2,
+                            fontSize: 20,
+                            fontStyle: "bold"
+                        }
+                    }
+                }
+            });
+                // Chart 5 - Doughnut chart url score
+            const ctx5 = document.getElementById("chart5").getContext("2d");
+            const data5 = [];
+            const urlProb = {{ url_score }};
+            const noturlProb = 1 - urlProb;
+            const chart5 = new Chart(ctx5, {
+                type: "doughnut",
+                data: {
+                    labels: ["Malicious URL", "Not a malicious URL"],
+                    datasets: [{
+                        data: [urlProb, noturlProb],
+                        backgroundColor: ["rgba(255, 99, 132, 0.6)", "#D9D9D9"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        labels: {
+                            render: "percentage",
+                            fontColor: ["white", "white"],
+                            precision: 2,
+                            fontSize: 20,
+                            fontStyle: "bold"
+                        }
+                    }
+                }
+            });
+            
+           
+
+            {% endblock %}
+
+
+
+        </script>
+        <script>
+            // Chart 6 - Doughnut chart attachement score
+            const ctx6 = document.getElementById("chart6").getContext("2d");
+            const data6 = [];
+            const attachementProb = {{ attachement_score }};
+            const notattachementProb = 1 - attachementProb;
+            const chart6 = new Chart(ctx6, {
+                type: "doughnut",
+                data: {
+                    labels: ["Malicious attachement", "Not a malicious attachement"],
+                    datasets: [{
+                        data: [attachementProb, notattachementProb],
+                        backgroundColor: ["#rgba(255, 206, 86, 0.6)", "#36A2EB"]
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        labels: {
+                            render: "percentage",
+                            fontColor: ["white", "white"],
+                            precision: 2,
+                            fontSize: 20,
+                            fontStyle: "bold"
+                        }
+                    }
+                }
+            });
+        </script>
+        <script src="{% static 'plugins/common/common.min.js' %}"></script>
+        <script src="{% static 'js/custom.min.js' %}"></script>
+        <script src="{% static 'js/settings.js' %}"></script>
+        <script src="{% static 'js/gleek.js' %}"></script>
+        <script src="{% static 'js/styleSwitcher.js' %}"></script>
+
+        <!--  flot-chart js -->
+        <script src="{% static './plugins/flot/js/jquery.flot.min.js' %}"></script>
+        <script src="{% static './plugins/flot/js/jquery.flot.pie.js' %}"></script>
+        <script src="{% static './plugins/flot/js/jquery.flot.resize.js' %}"></script>
+        <script src="{% static './plugins/flot/js/jquery.flot.spline.js' %}"></script>
+        <script src="{% static './plugins/flot/js/jquery.flot.init.js' %}"></script>
+</div>
+</body>
+
+</html>

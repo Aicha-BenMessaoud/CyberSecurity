@@ -1,0 +1,35 @@
+import imaplib
+import email
+from django.shortcuts import render
+
+def index(request):
+    # Login to the Gmail account
+    email_address = 'kalil.test99@gmail.com'
+    password = 'Test!123'
+    imap_server = 'imap.gmail.com'
+    imap = imaplib.IMAP4_SSL(imap_server)
+    imap.login(email_address, password)
+    imap.select('inbox')
+
+    # Retrieve the 10 most recent emails
+    _, msgnums = imap.search(None, 'ALL')
+    msgnums = msgnums[0].split()[-10:]
+
+    # Retrieve the full message data for each email
+    messages = []
+    for msgnum in msgnums:
+        _, data = imap.fetch(msgnum, '(RFC822)')
+        message = email.message_from_bytes(data[0][1])
+        messages.append({
+            'from': message.get('From'),
+            'subject': message.get('Subject'),
+            'date': message.get('Date'),
+            'body': message.get_payload(),
+        })
+        print("Content:")
+        for part in message.walk():
+             if part.get_content_type()=="text/plain":
+               print(part.as_string())  
+    # Logout of the Gmail account
+    imap.close()
+   

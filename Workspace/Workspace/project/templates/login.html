@@ -1,0 +1,117 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en" >
+
+<head>
+  <meta charset="UTF-8">
+  
+
+    <link rel="apple-touch-icon" type="image/png" href="https://cpwebassets.codepen.io/assets/favicon/apple-touch-icon-5ae1a0698dcc2402e9712f7d01ed509a57814f994c660df9f7a952f3060705ee.png" />
+
+    <meta name="apple-mobile-web-app-title" content="CodePen">
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico" />
+
+    <link rel="mask-icon" type="image/x-icon" href="https://cpwebassets.codepen.io/assets/favicon/logo-pin-b4b4269c16397ad2f0f7a01bcdf513a1994f4c94b8af2f191c09eb0d601762b1.svg" color="#111" />
+
+
+
+  
+  <title>PhishHunter login page</title>
+  
+  
+  
+  
+
+  <script>
+  window.console = window.console || function(t) {};
+</script>
+
+  
+  
+</head>
+
+<body translate="no">
+  <html>
+  <head>
+    <link
+      href="https://unpkg.com/tailwindcss@^1.0/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1"
+    />
+    <style>
+      body {
+        font-family: "Inter", sans-serif;
+      }
+    </style>
+    <script
+      src="https://cdn.jsdelivr.net/gh/alpinejs/alpine@v2.x.x/dist/alpine.js"
+      defer
+    ></script>
+  </head>
+
+  <body class="min-h-screen bg-gray-100 text-gray-900 flex justify-center">
+    <div class="max-w-screen-xl m-0 sm:m-20 bg-white shadow sm:rounded-lg flex justify-center flex-1">
+      <div class="lg:w-1/2 xl:w-5/12 p-6 sm:p-2">
+        <div style="display: flex; justify-content: center; align-items: center; margin-top: 0px; ">
+          <img src="static/images/logo-compact.png" alt="" />
+        </div>
+        <div class="mt-2 flex flex-col items-center">
+          <h1 class="text-2xl xl:text-3xl font-extrabold">
+            Sign in to PhishHunter
+          </h1>
+          <div class="w-full flex-1 mt-8">
+            <div class="my-5 border-b text-center">
+              <div class="leading-none px-2 inline-block text-sm text-gray-600 tracking-wide font-medium bg-white transform translate-y-1/2">
+                Sign in with your email credentials
+              </div>
+            </div>
+            <div class="mx-auto max-w-xs">
+              <form method="POST" action="{% url 'login'%}">
+                {% csrf_token %}
+                {% if error_message %}
+                <p class="text-red-500 mb-5">{{ error_message }}</p>
+                {% endif %}
+                <input class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white" type="email" name="email" placeholder="Email" required>
+                <input class="w-full px-8 py-4 rounded-lg font-medium bg-gray-100 border border-gray-200 placeholder-gray-500 text-sm focus:outline-none focus:border-gray-400 focus:bg-white mt-5" type="password" name="password" placeholder="Password" required>
+                <button class="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none" type="submit">Login</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="flex-1 bg-indigo-100 text-center hidden lg:flex">
+        <div class="m-12 xl:m-16 w-full bg-contain bg-center bg-no-repeat" style="background-image: url('static/images/image-removebg-preview.png');"></div>
+      </div>
+    </div>
+  </body>
+  
+</html>
+    <script src="https://cpwebassets.codepen.io/assets/common/stopExecutionOnTimeout-2c7831bb44f98c1391d6a4ffda0e1fd302503391ca806e7fcc7b9b87197aec26.js"></script>
+
+  
+      <script id="rendered-js" >
+/* YOU DONT NEED THESE, these are just for the popup you see */
+function closeTreactPopup() {
+  document.querySelector(".treact-popup").classList.add("hidden");
+}
+function openTreactPopup() {
+  document.querySelector(".treact-popup").classList.remove("hidden");
+}
+document.querySelector(".close-treact-popup").addEventListener("click", closeTreactPopup);
+setTimeout(openTreactPopup, 3000);
+//# sourceURL=pen.js
+    </script>
+
+  
+</body>
+
+</html>
